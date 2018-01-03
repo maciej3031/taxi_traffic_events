@@ -1,12 +1,13 @@
 from datetime import datetime, timedelta
+from config import DB_NAME, DB_URL
 
 import couchdb
 
 
 class CouchDBConnection:
     def __init__(self):
-        self.db_name = 'tass'
-        self.url = 'http://127.0.0.1:5984/'
+        self.db_name = DB_NAME
+        self.url = DB_URL
         self.server = couchdb.Server(self.url)
         self.db = self.server[self.db_name]
 

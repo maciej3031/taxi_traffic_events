@@ -36,3 +36,8 @@ def results():
         return render_template('index.html', result=dict(result), number_of_courses=number_of_courses, form=form)
 
     return render_template('index.html', form=form)
+
+
+# 1. Grafy - czy konieczne?
+# 2. Frontend mapa - pomysł
+# 3. Co w sprawozdaniu?
