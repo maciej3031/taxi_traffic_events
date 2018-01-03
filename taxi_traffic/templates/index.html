@@ -12,10 +12,17 @@
 </head>
 
 <body>
+  {% for message in get_flashed_messages() %}
+    <strong>{{ message }}</strong><br/>
+  {% endfor %}
+  <br/>
 
   <form action="" method="post">
-    {{ form.event.label }}<br/>
-    {{ form.event }}<br/><br/>
+    {{ form.artist.label }}<br/>
+    {{ form.artist }}<br/><br/>
+
+    {{ form.genre.label }}<br/>
+    {{ form.genre }}<br/><br/>
 
     {{ form.submit }}<br/><br/>
   </form>
