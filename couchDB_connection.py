@@ -1,6 +1,8 @@
 import couchdb
 from couchdb.design import ViewDefinition
 import sys
+import json
+import requests
 from uuid import uuid4
 
 events_data_selector = '''function(doc) {
@@ -34,15 +36,14 @@ class CouchDB_connection:
         'lng' : '',
         'neighborhood' : ''
     }
-
+    dbname = 'tass'
+    url = 'http://127.0.0.1:5984/'
     def __init__(self):
-        dbname = 'tass'
-        url = 'http://127.0.0.1:5984/'
-        self.server = couchdb.Server(url)
-        if dbname in self.server:
-            self.db = self.server[dbname]
+        self.server = couchdb.Server(self.url)
+        if self.dbname in self.server:
+            self.db = self.server[self.dbname]
         else:
-            self.db = self.server.create(dbname)
+            self.db = self.server.create(self.dbname)
         self.viewEventDoc = ViewDefinition('index', 'eventDocView', events_data_selector)
         self.viewEventDoc.sync(self.db)
         self.viewEventName = ViewDefinition('index', 'eventNameView', events_names_selector)
@@ -100,8 +101,14 @@ class CouchDB_connection:
         return res
     
     def save_traffic_events(self, events):
+        data = []
         for el in events:
             doc = vars(el)
             doc['_id'] = uuid4().hex
             doc['type'] = 'taxi'
-            self.db.save(doc)
+            data.append(doc)
+        r = requests.post('{}{}/_bulk_docs'.format(self.url, self.dbname), json={'docs' : data})
+        if(r.status_code == 201):
+            print('Successfully inserted traffic events data')
+        else:
+            print('Failed inserting traffic events data')
