@@ -13,6 +13,7 @@ conn = CouchDBConnection()
 def results():
     form = forms.EventForm()
     result = Counter()
+
     if request.method == 'POST' and form.validate():
         artist_name = request.form.get('artist')
         genre_name = request.form.get('genre')
@@ -27,10 +28,11 @@ def results():
 
         for event in events:
             event_dt_string = get_event_datetime_string(event)
-            taxi_traffic = conn.get_taxi_traffic_n_hours_after_event(event_dt_string, event.value['neighborhood'], 6)
+            taxi_traffic = conn.get_taxi_traffic_n_hours_after_event(event_dt_string, event.value['neighborhood'], 5)
             neighborhoods = [e.value['dropoff_neighborhood'] for e in taxi_traffic]
 
             result += Counter(neighborhoods)
+
         number_of_courses = sum(result.values())
 
         return render_template('index.html', result=dict(result), number_of_courses=number_of_courses, form=form)

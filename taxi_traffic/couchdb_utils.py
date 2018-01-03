@@ -16,8 +16,7 @@ class CouchDBConnection:
         end_time = datetime.strftime(end_datetime, '%Y-%m-%d %H:%M:%S')
         res = []
         for taxi_course in self.db.view('index/trafficEventsView', startkey=event_time, endkey=end_time):
-            pickup_neighbor = taxi_course.value['pickup_neighborhood']
-            if pickup_neighbor == event_neighbor:
+            if taxi_course.value['pickup_neighborhood'] == event_neighbor:
                 res.append(taxi_course)
         return res
 

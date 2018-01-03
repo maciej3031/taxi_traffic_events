@@ -101,4 +101,4 @@ ENV/
 .mypy_cache/
 
 .idea
-db.json
+old_db.json
