@@ -34,7 +34,7 @@ class CouchDBConnection:
     def get_events_by_genre(self, genre):
         res = []
         for event in self.db.view('index/eventDocView'):
-            if event.value['artist_genre'] == genre:
+            if genre in event.value['artist_genre']:
                 res.append(event)
         return res
 

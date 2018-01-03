@@ -1,10 +1,10 @@
 from collections import Counter
-from datetime import datetime
 
 from flask import render_template, request, flash, redirect, url_for
 
 from taxi_traffic import app, forms
 from taxi_traffic.couchdb_utils import CouchDBConnection
+from taxi_traffic.utils import get_event_datetime_string
 
 conn = CouchDBConnection()
 
@@ -12,6 +12,7 @@ conn = CouchDBConnection()
 @app.route('/', methods=['GET', 'POST'])
 def results():
     form = forms.EventForm()
+    result = Counter()
     if request.method == 'POST' and form.validate():
         artist_name = request.form.get('artist')
         genre_name = request.form.get('genre')
@@ -24,14 +25,8 @@ def results():
             flash('Choose one filter!')
             return redirect(url_for('results'))
 
-        result = Counter()
         for event in events:
-            try:
-                event_datetime = datetime.strptime(event.key, '%Y-%m-%dT%H:%M:%S%z')
-            except ValueError:
-                event_datetime = datetime.strptime("{}T20:00:00-0400".format(event.key), '%Y-%m-%dT%H:%M:%S%z')
-            event_dt_string = datetime.strftime(event_datetime, '%Y-%m-%d %H:%M:%S')
-
+            event_dt_string = get_event_datetime_string(event)
             taxi_traffic = conn.get_taxi_traffic_n_hours_after_event(event_dt_string, event.value['neighborhood'], 6)
             neighborhoods = [e.value['dropoff_neighborhood'] for e in taxi_traffic]
 
