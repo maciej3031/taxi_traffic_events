@@ -31,7 +31,8 @@ def results():
             neighborhoods = [e.value['dropoff_neighborhood'] for e in taxi_traffic]
 
             result += Counter(neighborhoods)
+        number_of_courses = sum(result.values())
 
-        return render_template('index.html', result=dict(result), form=form)
+        return render_template('index.html', result=dict(result), number_of_courses=number_of_courses, form=form)
 
     return render_template('index.html', form=form)

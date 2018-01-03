@@ -15,6 +15,7 @@
   {% for message in get_flashed_messages() %}
     <strong>{{ message }}</strong><br/>
   {% endfor %}
+
   <br/>
 
   <form action="" method="post">
@@ -27,6 +28,14 @@
     {{ form.submit }}<br/><br/>
   </form>
 
-  {{ result }}
+  {% if result %}
+    {{ result }}
+  {% endif %}
+
+  <br/><br/>
+
+  {% if number_of_courses %}
+    Number of taxi courses: {{ number_of_courses }}
+  {% endif %}
 </body>
 </html>
