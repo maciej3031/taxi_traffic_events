@@ -1,0 +1,41 @@
+<!-- taxi_traffic/templates/index.html -->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="description" content=""/>
+  <meta name="keywords" content=""/>
+
+  <title>{{ config.SITE_NAME }}</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  {% for message in get_flashed_messages() %}
+    <strong>{{ message }}</strong><br/>
+  {% endfor %}
+
+  <br/>
+
+  <form action="" method="post">
+    {{ form.artist.label }}<br/>
+    {{ form.artist }}<br/><br/>
+
+    {{ form.genre.label }}<br/>
+    {{ form.genre }}<br/><br/>
+
+    {{ form.submit }}<br/><br/>
+  </form>
+
+  {% if result %}
+    {{ result }}
+  {% endif %}
+
+  <br/><br/>
+
+  {% if number_of_courses %}
+    Number of taxi courses: {{ number_of_courses }}
+  {% endif %}
+</body>
+</html>
