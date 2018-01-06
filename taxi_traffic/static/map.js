@@ -7,18 +7,18 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
     id: 'mapbox.streets'
 }).addTo(mymap);
 
-function heatMapColorforValue(value) {
+var colorscale = [[0, '#EDE7F6'],
+                [0.11, '#D1C4E9'],
+                [0.22, '#B39DDB'],
+                [0.33, '#9575CD'],
+                [0.44, '#7E57C2'],
+                [0.55, '#673AB7'],
+                [0.66, '#5E35B1'],
+                [0.77, '#512DA8'],
+                [0.88, '#4527A0'],
+                [1, '#311B92']];
 
-    var colorscale = [[0, '#EDE7F6'],
-    [0.11, '#D1C4E9'],
-    [0.22, '#B39DDB'],
-    [0.33, '#9575CD'],
-    [0.44, '#7E57C2'],
-    [0.55, '#673AB7'],
-    [0.66, '#5E35B1'],
-    [0.77, '#512DA8'],
-    [0.88, '#4527A0'],
-    [1, '#311B92']];
+function heatMapColorforValue(value) {
     for (var i = 0; i < colorscale.length; i++) {
         if (value <= colorscale[i][0]) {
             return colorscale[i][1];
@@ -31,8 +31,25 @@ function findMax(data) {
     return Math.max.apply(null, arr);
 }
 
+function createLegend(max_value) {
+    var div = $('#legend');
+    var table = $('<table></table>');
+    var row = $('<tr></tr>');
+    for (i = 0; i < colorscale.length; i++) {
+        var cell = $('<td></td>');
+        row.append(cell);
+        cell.text(Math.round(i/colorscale.length * max_value));
+        cell.css('background-color', colorscale[i][1]);
+        cell.css('width', '50px');
+    }
+    table.addClass('table-bordered');
+    table.append(row);
+    div.append(table);
+}
+
 function printMap(taxi_courses, geometries) {
     var max_number_of_courses = findMax(taxi_courses);
+    createLegend(max_number_of_courses);
     for (var key in geometries) {
         number_of_courses = taxi_courses[key];
         if (!number_of_courses) {
