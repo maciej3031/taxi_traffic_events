@@ -44,3 +44,9 @@ class CouchDBConnection:
             if event.value['artist_name'] == artist:
                 res.append(event)
         return res
+
+    def get_neighborhoods_geometries(self):
+        res = {}
+        for neighborhood in self.db.view('index/neighborhoodsShapesView'):
+            res[neighborhood['value']['name']] = {'geometry' : neighborhood['value']['geometry']}
+        return res

@@ -1,6 +1,6 @@
 from collections import Counter
 
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, jsonify
 
 from taxi_traffic import app, forms
 from taxi_traffic.couchdb_utils import CouchDBConnection
@@ -38,3 +38,8 @@ def results():
         return render_template('index.html', result=dict(result), number_of_courses=number_of_courses, form=form)
 
     return render_template('index.html', form=form)
+
+@app.route('/neighborhoods')
+def get_neighborhoods():
+    geometries = conn.get_neighborhoods_geometries()
+    return jsonify(geometries)
