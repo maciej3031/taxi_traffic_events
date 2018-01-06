@@ -63,8 +63,11 @@
   <script>
     {% if result %}
       {% if number_of_courses %}
-        var data = {{ result| tojson }};
-        printMap(data);
+      {% if geometries %}
+          var geometries = {{ geometries| tojson}};
+          var data = {{ result| tojson }};
+          printMap(data, geometries);
+        {% endif %}
       {% endif %}
     {% endif %}
   </script>

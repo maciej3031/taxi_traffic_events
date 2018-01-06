@@ -7,55 +7,47 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
     id: 'mapbox.streets'
 }).addTo(mymap);
 
-var colorscale = [[0,    '#EDE7F6'],
-                  [0.11, '#D1C4E9'],
-                  [0.22, '#B39DDB'],
-                  [0.33, '#9575CD'],
-                  [0.44, '#7E57C2'],
-                  [0.55, '#673AB7'],
-                  [0.66, '#5E35B1'],
-                  [0.77, '#512DA8'],
-                  [0.88, '#4527A0'],
-                  0[1,   '#311B92']];
+function heatMapColorforValue(value) {
 
-function heatMapColorforValue(value){
-    for(var i = 0; i < colorscale.length; i++) {
-        if(value <= colorscale[i][0]) {
+    var colorscale = [[0, '#EDE7F6'],
+    [0.11, '#D1C4E9'],
+    [0.22, '#B39DDB'],
+    [0.33, '#9575CD'],
+    [0.44, '#7E57C2'],
+    [0.55, '#673AB7'],
+    [0.66, '#5E35B1'],
+    [0.77, '#512DA8'],
+    [0.88, '#4527A0'],
+    [1, '#311B92']];
+    for (var i = 0; i < colorscale.length; i++) {
+        if (value <= colorscale[i][0]) {
             return colorscale[i][1];
         }
     }
 }
 
 function findMax(data) {
-    var arr = Object.keys( data ).map(function ( key ) { return data[key]; });
+    var arr = Object.keys(data).map(function (key) { return data[key]; });
     return Math.max.apply(null, arr);
 }
 
-function printMap(taxi_courses) {
-
-    $.ajax({
-        url: 'http://localhost:5000/neighborhoods',
-        dataType: 'application/json',
-        complete: function(data){
-            var geometries = JSON.parse(data.responseText);
-            var max_number_of_courses = findMax(taxi_courses);
-            for (var key in geometries) {
-                number_of_courses = taxi_courses[key];
-                if(!number_of_courses) {
-                    number_of_courses = 0;
-                }
-                color = heatMapColorforValue(number_of_courses/max_number_of_courses)
-                var geometry =  L.geoJSON(JSON.parse(geometries[key].geometry), {
-                    style : {
-                        color : color,
-                        weight: 1,
-                        opacity: 0.5,
-                        fillOpacity: 0.5,
-                        fillColor: color
-                    }
-                });
-                geometry.addTo(mymap);
-            }
+function printMap(taxi_courses, geometries) {
+    var max_number_of_courses = findMax(taxi_courses);
+    for (var key in geometries) {
+        number_of_courses = taxi_courses[key];
+        if (!number_of_courses) {
+            number_of_courses = 0;
         }
-    });
+        color = heatMapColorforValue(number_of_courses / max_number_of_courses)
+        var geometry = L.geoJSON(JSON.parse(geometries[key].geometry), {
+            style: {
+                color: color,
+                weight: 1,
+                opacity: 0.5,
+                fillOpacity: 0.5,
+                fillColor: color
+            }
+        });
+        geometry.addTo(mymap);
+    }
 }

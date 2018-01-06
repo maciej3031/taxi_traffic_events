@@ -35,7 +35,9 @@ def results():
 
         number_of_courses = sum(result.values())
 
-        return render_template('index.html', result=dict(result), number_of_courses=number_of_courses, form=form)
+        geometries = conn.get_neighborhoods_geometries()
+
+        return render_template('index.html', result=dict(result), number_of_courses=number_of_courses, form=form, geometries=geometries)
 
     return render_template('index.html', form=form)
 
