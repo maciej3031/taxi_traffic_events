@@ -8,3 +8,6 @@ Username and password are your couchdb credentials.
 4. Activate virtual env using `source venv/bin/activate`
 5. Install python packages using `pip install -r requirements.txt`
 6. Run `python run.py` to start application and go to: `http://127.0.0.1:5000/`.
+
+
+![alt text](https://github.com/maciej3031/taxi_traffic_events/blob/master/app_screen.png)
